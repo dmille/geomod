@@ -7,4 +7,3 @@ function [Y] = plot_poly(X, a, m)
     plot(X,Y, 'x');
     axis([-3 3 -inf inf]);
 end
-
