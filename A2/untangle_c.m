@@ -1,7 +1,7 @@
 min_x = 0; max_x = 10;
 min_y = 0; max_y = 10;
 n = 20;
-iters = 500;
+iters = 200;
 fps = 5;
 
 delay = 1/fps;
@@ -13,7 +13,7 @@ j = [1:n, 2:n, 1];
 s = ones(n+n, 1) * 0.5;
 M = sparse(i, j, s);
 [V,D] = eigs(M);
-V(:,1)
+D
 for i = 1:iters
     X = M * X;
     Y = M * Y;    
