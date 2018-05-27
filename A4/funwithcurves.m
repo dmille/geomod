@@ -320,8 +320,7 @@ if myhandles.checked % if the checkbox is checked show the intermediate steps
  
  %%============================your code==================================== 
  %%Your code for drawing the intermediate decasteljau steps (4.1.b) can be put here   
- 
- 
+    plot_intermediate(myhandles.controlPts, myhandles.t);
  %%=========================================================================
 end
 
@@ -334,6 +333,7 @@ guidata(gcbo,myhandles)
 
 %%
 function mycurve= my_nice_function(controlPts,tsampling);
+
 %define your function here for 4.1 a
  %%============================your code==================================== 
      if(size(controlPts,1) == 1)
