@@ -16,5 +16,4 @@ cd = cd';
 
 drawnow
 
-
 set(ha.Edge, 'ColorBinding','interpolated','ColorData',cd);
