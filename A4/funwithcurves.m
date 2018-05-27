@@ -288,7 +288,7 @@ if ncp>1
   % and the parametric sampling: myhandles.tsampling
   %and outputs the coorinates of the whole curves in the array: mycurve
 
-  [mycurve, curvature] = decasteljau_with_curvature(myhandles.controlPts, myhandles.tsampling);
+  mycurve = my_nice_function(myhandles.controlPts, myhandles.tsampling);
   %mycurve= my_nice_function(myhandles.controlPts,myhandles.tsampling);
   %%
   
@@ -298,19 +298,6 @@ if ncp>1
     set(myhandles.curve,'Xdata',mycurve(:,1));
     set(myhandles.curve,'Ydata',mycurve(:,2));
   end
-
-  abs_curvature = abs(curvature);
-  rescaled_curvature = 255 - rescale(abs_curvature, 0, 255);
-  n = length(curvature);
-  
-  cd = [uint8(rescaled_curvature) uint8(rescaled_curvature) uint8(rescaled_curvature) uint8(ones(n,1))];
-  cd(curvature >= 0, 1) = 255;
-  cd(curvature <= 0, 3) = 255;
-
-  cd = cd';
-  drawnow
-  set(myhandles.curve.Edge, 'ColorBinding','interpolated','ColorData',cd);
-
 end
 
 %% two special case which happen when deleting points

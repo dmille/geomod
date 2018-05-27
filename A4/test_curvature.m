@@ -1,4 +1,4 @@
-controlPts = [0 0; 0 5; 3 3; 5 0; 5 5];
+controlPts = [0 0; 0 5; 6 -3; 5 0; 3 5; 2 0];
 tsampling=linspace(0,1,250)';
 [mycurve, curvature] = decasteljau_with_curvature(controlPts, tsampling);
 
