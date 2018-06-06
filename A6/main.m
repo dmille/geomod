@@ -8,16 +8,24 @@ figure('Name','Noisy Data Approximater','NumberTitle','off','color','white')
 %% define variables used and store them in handle 
 myhandles=[];
 
-myhandles.controlPts=zeros(0,2);
-
 myhandles.noisy_data=zeros(0,2);
 myhandles.noisy_plot=0;
 
-myhandles.curve=0;
+myhandles.tsampling = linspace(0,1,128)';
 
 myhandles.dragStyle=0;
 myhandles.dragedControlPoint=0;
 myhandles.axis=0;
+
+myhandles.bezier_controlPts = zeros(4,2,0);
+myhandles.bezier_plots = 0;
+myhandles.bezier_curves = 0;
+%% Test Control Points %%%%%%%%%%%%%%%
+control_1 = [1,1; 2,5; 5,5; 5,1];
+control_2 = [5,2; 3,8; 2,9; 9,9];
+myhandles.bezier_controlPts(:,:,1) = control_1;
+myhandles.bezier_controlPts(:,:,2) = control_2;
+%%%%%%%%%%%%%%%%%%%%
 
 %% design a basic  interface
 % setup axis with a grid layout for drawing 
@@ -52,7 +60,6 @@ uicontrol('Units','normalized', ...
 
 %save myhandle using guidata 
 guidata(gcf,myhandles) 
-
 
 %d%efine Mouse callbacks
 set(gcf,'WindowButtonDownFcn',@mousePress);
@@ -137,8 +144,6 @@ end
 %% Update Plot
 updatePlot;
 
-
-
 % Mouse button released
 function mouseRelease(varargin)
 %global myhandles;
@@ -183,51 +188,46 @@ else
   set(myhandles.noisy_plot, 'Ydata', myhandles.noisy_data(:,2));
 end
 
-ncp=size(myhandles.controlPts,1);%number of control points
+bezier_count = size(myhandles.bezier_controlPts,3);%number of beziers
 
-%decide when to draw/update the control polygon and the curve
-if ncp>0
-  % draw polygon
-  if myhandles.control_polygon==0  %draw polygon for the first time
-    myhandles.control_polygon=plot(myhandles.controlPts(:,1),myhandles.controlPts(:,2),'-o',...
-        'color',[.4,.4,.4],...
-        'LineWidth',2,...
-    'MarkerSize',15,...
-    'MarkerEdgeColor','green',...
-    'MarkerFaceColor',[0.5,0.5,0.75]);
-  else
-    set(myhandles.control_polygon,'Xdata',myhandles.controlPts(:,1));
-    set(myhandles.control_polygon,'Ydata',myhandles.controlPts(:,2));
-  end
-end
-
-if ncp>1
- 
-  % draw curve
-   %%============================your code==================================== 
-  %% call your function for computing the curve coordinates here
-  % it takes as inpust the control points: myhandles.controlPts 
-  % and the parametric sampling: myhandles.tsampling
-  %and outputs the coorinates of the whole curves in the array: mycurve
-
-  mycurve = decastejau(myhandles.controlPts, myhandles.tsampling);
-  %mycurve= my_nice_function(myhandles.controlPts,myhandles.tsampling);
-  %%
-  
-  if myhandles.curve==0 %draw curve for the first time  
-    myhandles.curve=plot(mycurve(:,1),mycurve(:,2),'-r','Linewidth',2);  
-  else %update curve
-    set(myhandles.curve,'Xdata',mycurve(:,1));
-    set(myhandles.curve,'Ydata',mycurve(:,2));
-  end
-end
-
-%% two special case which happen when deleting points
-if ncp<2
-    if myhandles.curve~=0
-        delete(myhandles.curve)
-        myhandles.curve=0;
+%decide when to draw/update the control points
+if bezier_count > 0
+  % draw bezier
+  if myhandles.bezier_plots == 0  % draw beziers for the first time
+    for i=[1:bezier_count]
+      myhandles.bezier_plots(i) = plot(myhandles.bezier_controlPts(:,1,i),myhandles.bezier_controlPts(:,2,i),'-o',...
+                                       'color',[.4,.4,.4],...
+                                       'LineWidth',1,...
+                                       'MarkerSize',8,...
+                                       'MarkerEdgeColor','green',...
+                                       'MarkerFaceColor',[0.5,0.5,0.75]);
     end
+  else
+    for i=[1:bezier_count]
+      set(myhandles.bezier_plots(i),'Xdata',myhandles.bezier_controlPts(:,1,i));
+      set(myhandles.bezier_plots(i),'Ydata',myhandles.bezier_controlPts(:,2,i));
+    end
+  end
+end
+
+if bezier_count > 1
+  new_curves = zeros(128,2,0);
+   % draw curve
+  for i=[1:bezier_count]
+    new_curves(:,:,i) = decasteljau(myhandles.bezier_controlPts(:,:,i) , myhandles.tsampling);
+  end
+  %%
+    size(new_curves)
+  if myhandles.bezier_curves == 0 %draw curve for the first time
+    for i=[1:bezier_count]
+      myhandles.bezier_curves(i)=plot(new_curves(:,1,i),new_curves(:,2,i),'-g','Linewidth',1);  
+    end
+  else %update curve
+    for i=[1:bezier_count]
+      set(myhandles.bezier_curves(i),'Xdata', new_curves(:,1,i));
+      set(myhandles.bezier_curves(i),'Ydata', new_curves(:,2,i));
+    end
+  end
 end
 
 %update the handles data
@@ -235,12 +235,12 @@ guidata(gcbo,myhandles)
 
  
 
-function mycurve= decastejau(controlPts,tsampling);
+function new_curves= decasteljau(controlPts,tsampling);
 
 %define your function here for 4.1 a
  %%============================your code==================================== 
      if(size(controlPts,1) == 1)
-        mycurve = controlPts;
+        new_curves = controlPts;
     else
-        mycurve = (1 - tsampling) .* decasteljau(controlPts(1:end-1,:), tsampling) + tsampling .* decasteljau(controlPts(2:end,:), tsampling);
+        new_curves = (1 - tsampling) .* decasteljau(controlPts(1:end-1,:), tsampling) + tsampling .* decasteljau(controlPts(2:end,:), tsampling);
     end
