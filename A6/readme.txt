@@ -1,0 +1,1 @@
+Opening directory A6
