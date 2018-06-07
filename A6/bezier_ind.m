@@ -1,11 +1,7 @@
 function b_pts = bezier_ind(control_pts,i)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
-    if i == 1
-        b0_ind = 1;
-    else
-        b0_ind = 3*i - 2;
-    end
+    b0_ind = 3*i - 2;
     
     b0 = control_pts(b0_ind,:);
     b1 = control_pts(b0_ind+1,:);
