@@ -8,11 +8,9 @@ function [tout] = samplePntParametrization(points)
     n = length(points);
     t = zeros(1,n);
     s = 0;
-    
-    for i=2:n
-        s = s + pdist([points(i);points(i-1)]);
-        t(i) = s;
-    end
-    tout = t/s;
+
+    diff = points - circshift(points,-1) % calculate the differences between x(i) and x(i+1)
+    v = vecnorm(diff(1:end-1, :)) % calculate the euclidean norm of each difference
+    tout = [0 cumsum(v)/sum(v)]; % produces normalized cumulative sum array and sets the first element to 0 (special case)
 end
 
