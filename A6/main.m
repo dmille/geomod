@@ -20,12 +20,7 @@ function main
   myhandles.bezier_controlPts = zeros(0,2);
   myhandles.bezier_plot = 0;
   myhandles.bezier_curves = 0;
-
-  %% Test Control Points %%%%%%%%%%%%%%%
-  controlPts = [1,1; 2,5; 5,5; 5,1; 3,8; 2,9; 9,9];
-  myhandles.bezier_controlPts = controlPts;
-%%%%%%%%%%%%%%%%%%%%
-
+  myhandles.n_beziers = 50;
   %% design a basic  interface
   % setup axis with a grid layout for drawing 
   hax = gca; %get handle of current axes
@@ -39,16 +34,7 @@ function main
   myhandles.axis=hax;
                                 %guidata(gcf,myhandles) 
 
-                       % reset clear the screen and re-initialize data
-  uicontrol('Units','normalized', ...
-	        'BackgroundColor','white', ...
-            'ForegroundColor','red',...
-	        'String','Reset', ...
-	        'Position',[.9,.0,.1,.04], ...
-	        'Callback',@reset,...
-	        'Style','pushbutton');
-
-                                % Open new file
+  %% Open new file
   uicontrol('Units','normalized', ...
 	        'BackgroundColor','white', ...
             'ForegroundColor','black',...
@@ -57,14 +43,12 @@ function main
 	        'Callback',@open_new_file,...
 	        'Style','pushbutton');
 
-                                %save myhandle using guidata 
+  %% save myhandle using guidata 
   guidata(gcf,myhandles) 
 
-                                %d%efine Mouse callbacks
+  %% define Mouse callbacks
   set(gcf,'WindowButtonDownFcn',@mousePress);
   set(gcf,'WindowButtonMotionFcn',@mouseDrag);
   set(gcf,'WindowButtonUpFcn',@mouseRelease);
-
-                                %open_new_file();
 
 end

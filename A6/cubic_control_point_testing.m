@@ -1,6 +1,6 @@
 hold on
-knots = [0 0;1 2;2 3;3 3;4 4;5 4.5;6 4;7 3;8 2];
-cp = cubicBezierLeastSquaresPnts(knots);
+points = [0 0;1 2;2 3;3 3;4 4;5 4.5;6 4;7 3;8 2];
+cp = cubicBezierLeastSquaresPnts(points);
 
 t = linspace(0,1,100)';
 bezier = decasteljau(cp,t);
