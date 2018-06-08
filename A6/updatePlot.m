@@ -27,32 +27,30 @@ function updatePlot
                                    'MarkerFaceColor',[0.5,0.5,0.75]);
       %% Otherwise, update the plot
     else
-      for i=[1:bezier_count]
-        set(myhandles.bezier_plot,'Xdata',myhandles.bezier_controlPts(:,1));
-        set(myhandles.bezier_plot,'Ydata',myhandles.bezier_controlPts(:,2));
-      end
+      set(myhandles.bezier_plot,'Xdata',myhandles.bezier_controlPts(:,1));
+      set(myhandles.bezier_plot,'Ydata',myhandles.bezier_controlPts(:,2));
     end
   end
 
   
   %% UPDATE BEZIER CURVES
   if bezier_count > 1
-    new_curves = zeros(128,2,0);
+    %%new_curves = zeros(128,2,0);
     %% Calculate new curves
+    new_curves = [nan nan];
     for i=[1:bezier_count]
-      new_curves(:,:,i) = decasteljau(bezier_ind(myhandles.bezier_controlPts,i) , myhandles.tsampling);
+      new_curves = [new_curves; decasteljau(bezier_ind(myhandles.bezier_controlPts,i) , myhandles.tsampling)];
     end
 
     %% If first time drawn, new plot
     if myhandles.bezier_curves == 0 %draw curve for the first time
-      for i=[1:bezier_count]
-        myhandles.bezier_curves(i)=plot(new_curves(:,1,i),new_curves(:,2,i),'-g','Linewidth',1);  
-      end
+        myhandles.bezier_curves=plot(new_curves(:,1),new_curves(:,2),'-g','Linewidth',1);  
+
       %% if not first time, update plot
     else 
       for i=[1:bezier_count]
-        set(myhandles.bezier_curves(i),'Xdata', new_curves(:,1,i));
-        set(myhandles.bezier_curves(i),'Ydata', new_curves(:,2,i));
+        set(myhandles.bezier_curves,'Xdata', new_curves(:,1));
+        set(myhandles.bezier_curves,'Ydata', new_curves(:,2));
       end
     end
   end
