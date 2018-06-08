@@ -13,5 +13,6 @@ function [control_pts] = fit_bezier(noisy_data, n_beziers)
   for i=[1:n_beziers]
     control_pts(i:i+3, :) = cubicBezierLeastSquaresPnts(noisy_data([idxs(i,1):idxs(i,2)],:));
   end
-  
+
+  control_pts = make_C1_cont(control_pts);
 end
