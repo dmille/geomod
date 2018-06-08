@@ -15,32 +15,45 @@ for j=2:k
     % pull out 3 control points used for this interation of c1.
     c1_3pts = control_points(k_ind-1:k_ind+1,1:2);
     
-    % use linear least squares for shift to c1 continuous
-    A = lin_least_squares(c1_3pts);
-    
-    % A is intercept and slope of the least squares line for the knot and
-    % the 2 control points on either side. Next line puts control points
-    % onto least squares line
-    c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
-
-    % find the difference in x between neighboring points. split to be added or
-    % subtracted to make equal for c1 continuity
-    split_diffx = (abs(c1_3pts(2,1) - c1_3pts(1,1)) - abs(c1_3pts(3,1) - c1_3pts(2,1)))/2;
-    
-    % move x values so equadistant to middle point
-    if (c1_3pts(3,1) > c1_3pts(1,1))
-        c1_3pts(1,1) = c1_3pts(1,1) + split_diffx;
-        c1_3pts(3,1) = c1_3pts(3,1) + split_diffx;
+    % if all 3 points have same x, just change y values.
+    if (c1_3pts(1,1) == c1_3pts(2,1) && c1_3pts(2,1) == c1_3pts(3,1))
+        split_diffy = (abs(c1_3pts(2,2) - c1_3pts(1,2)) - abs(c1_3pts(3,2) - c1_3pts(2,2)))/2;
+        
+        if (c1_3pts(3,2) > c1_3pts(1,2))
+            c1_3pts(1,2) = c1_3pts(1,2) + split_diffy;
+            c1_3pts(3,2) = c1_3pts(3,2) + split_diffy;
+        else
+            c1_3pts(1,2) = c1_3pts(1,2) - split_diffy;
+            c1_3pts(3,2) = c1_3pts(3,2) - split_diffy;
+        end
+        
     else
-        c1_3pts(1,1) = c1_3pts(1,1) - split_diffx;
-        c1_3pts(3,1) = c1_3pts(3,1) - split_diffx;
+        % use linear least squares for shift to c1 continuous
+        A = lin_least_squares(c1_3pts);
+        
+        % A is intercept and slope of the least squares line for the knot and
+        % the 2 control points on either side. Next line puts control points
+        % onto least squares line
+        c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
+
+        % find the difference in x between neighboring points. split to be added or
+        % subtracted to make equal for c1 continuity
+        split_diffx = (abs(c1_3pts(2,1) - c1_3pts(1,1)) - abs(c1_3pts(3,1) - c1_3pts(2,1)))/2;
+
+        % move x values so equadistant to middle point
+        if (c1_3pts(3,1) > c1_3pts(1,1))
+            c1_3pts(1,1) = c1_3pts(1,1) + split_diffx;
+            c1_3pts(3,1) = c1_3pts(3,1) + split_diffx;
+        else
+            c1_3pts(1,1) = c1_3pts(1,1) - split_diffx;
+            c1_3pts(3,1) = c1_3pts(3,1) - split_diffx;
+        end
+
+        % get new y values for 1 and 3 after x shift
+        c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
     end
     
-    % get new y values for 1 and 3 after x shift
-    c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
-    
     out_cp(k_ind-1:k_ind+1,1:2) = c1_3pts;
-    
     
     if (control_points(1,1:2) ~= control_points(end,1:2))
         out_cp(1,1:2) = control_points(1,1:2);
@@ -54,29 +67,43 @@ end
 if (control_points(1,1:2) == control_points(end,1:2))
     c1_3pts = [control_points(end-1,1:2);control_points(1,1:2);control_points(2,1:2)];
     
-    % use linear least squares for shift to c1 continuous
-    A = lin_least_squares(c1_3pts);
-    
-    % A is intercept and slope of the least squares line for the knot and
-    % the 2 control points on either side. Next line puts control points
-    % onto least squares line
-    c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
-    
-    % find the difference in x between neighboring points. split to be added or
-    % subtracted to make equal for c1 continuity
-    split_diffx = (abs(c1_3pts(2,1) - c1_3pts(1,1)) - abs(c1_3pts(3,1) - c1_3pts(2,1)))/2;
-    
-    % move x values so equadistant to middle point
-    if (c1_3pts(3,1) > c1_3pts(1,1))
-        c1_3pts(1,1) = c1_3pts(1,1) + split_diffx;
-        c1_3pts(3,1) = c1_3pts(3,1) + split_diffx;
+    % if all 3 points have same x, just change y values.
+    if (c1_3pts(1,1) == c1_3pts(2,1) && c1_3pts(2,1) == c1_3pts(3,1))
+        split_diffy = (abs(c1_3pts(2,2) - c1_3pts(1,2)) - abs(c1_3pts(3,2) - c1_3pts(2,2)))/2;
+        
+        if (c1_3pts(3,2) > c1_3pts(1,2))
+            c1_3pts(1,2) = c1_3pts(1,2) + split_diffy;
+            c1_3pts(3,2) = c1_3pts(3,2) + split_diffy;
+        else
+            c1_3pts(1,2) = c1_3pts(1,2) - split_diffy;
+            c1_3pts(3,2) = c1_3pts(3,2) - split_diffy;
+        end
+        
     else
-        c1_3pts(1,1) = c1_3pts(1,1) - split_diffx;
-        c1_3pts(3,1) = c1_3pts(3,1) - split_diffx;
+        % use linear least squares for shift to c1 continuous
+        A = lin_least_squares(c1_3pts);
+        
+        % A is intercept and slope of the least squares line for the knot and
+        % the 2 control points on either side. Next line puts control points
+        % onto least squares line
+        c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
+
+        % find the difference in x between neighboring points. split to be added or
+        % subtracted to make equal for c1 continuity
+        split_diffx = (abs(c1_3pts(2,1) - c1_3pts(1,1)) - abs(c1_3pts(3,1) - c1_3pts(2,1)))/2;
+
+        % move x values so equadistant to middle point
+        if (c1_3pts(3,1) > c1_3pts(1,1))
+            c1_3pts(1,1) = c1_3pts(1,1) + split_diffx;
+            c1_3pts(3,1) = c1_3pts(3,1) + split_diffx;
+        else
+            c1_3pts(1,1) = c1_3pts(1,1) - split_diffx;
+            c1_3pts(3,1) = c1_3pts(3,1) - split_diffx;
+        end
+
+        % get new y values for 1 and 3 after x shift
+        c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
     end
-    
-    % get new y values for 1 and 3 after x shift
-    c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
     
     out_cp(end-1,1:2) = c1_3pts(1,1:2);
     out_cp(end,1:2) = c1_3pts(2,1:2);
