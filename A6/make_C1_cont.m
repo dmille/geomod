@@ -30,11 +30,16 @@ for j=2:k
     else
         % use linear least squares for shift to c1 continuous
         A = lin_least_squares(c1_3pts);
-        
+         
         % A is intercept and slope of the least squares line for the knot and
-        % the 2 control points on either side. Next line puts control points
-        % onto least squares line
+        % the 2 control points on either side. 
+        % Snap control points to this line using intersection of point slope with slope=(1/A(2))
+        b = A(1);
+        m = A(2);
+        c1_3pts(:,1) = ((1/m)*c1_3pts(:,1)+c1_3pts(:,2)-b)/(m+1/m);
         c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
+        
+        %plot(c1_3pts(:,1),c1_3pts(:,2),'o','markeredgecolor','r');
 
         % find the difference in x between neighboring points. split to be added or
         % subtracted to make equal for c1 continuity
@@ -51,6 +56,8 @@ for j=2:k
 
         % get new y values for 1 and 3 after x shift
         c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
+        
+        plot(c1_3pts(:,1),c1_3pts(:,2),'o','markeredgecolor','r');
     end
     
     out_cp(k_ind-1:k_ind+1,1:2) = c1_3pts;
@@ -84,8 +91,11 @@ if (control_points(1,1:2) == control_points(end,1:2))
         A = lin_least_squares(c1_3pts);
         
         % A is intercept and slope of the least squares line for the knot and
-        % the 2 control points on either side. Next line puts control points
-        % onto least squares line
+        % the 2 control points on either side. 
+        % Snap control points to this line using intersection of point slope with slope=(1/A(2))
+        b = A(1);
+        m = A(2);
+        c1_3pts(:,1) = ((1/m)*c1_3pts(:,1)+c1_3pts(:,2)-b)/(m+1/m);
         c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
 
         % find the difference in x between neighboring points. split to be added or
