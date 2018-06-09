@@ -14,8 +14,10 @@ function open_new_file(varargin)
     myhandles.noisy_data = fscanf(fileID, format, data_size)';
     m = size(myhandles.noisy_data, 1);
 
+    myhandles.n_beziers = find_best_n_beziers(myhandles.noisy_data);
+    
     myhandles.max_beziers = floor(m/5);
-    myhandles.n_beziers = floor(myhandles.max_beziers/2);
+
     set(myhandles.n_beziers_slider, 'Value',myhandles.n_beziers);
     set(myhandles.n_beziers_slider, 'Max', myhandles.max_beziers);
     set(myhandles.n_beziers_slider, 'Sliderstep', [1/myhandles.max_beziers 0.1]);
