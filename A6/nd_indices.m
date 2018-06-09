@@ -9,7 +9,6 @@ function [indices] = nd_indices(n_beziers, n_noisy_pts)
   for i=1:n_beziers
     cumulative = cumulative + ppb;
     num_to_use = round(cumulative) - used_pts;
-                                %    first = ((i-1) * num_to_use) + 1;
     first = used_pts + 1;
     last = (used_pts + num_to_use) + 1;  
     indices(i,:) = [first,last];

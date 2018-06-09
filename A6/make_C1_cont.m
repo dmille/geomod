@@ -57,7 +57,7 @@ for j=2:k
         % get new y values for 1 and 3 after x shift
         c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
         
-        plot(c1_3pts(:,1),c1_3pts(:,2),'o','markeredgecolor','r');
+        %plot(c1_3pts(:,1),c1_3pts(:,2),'o','markeredgecolor','r');
     end
     
     out_cp(k_ind-1:k_ind+1,1:2) = c1_3pts;
