@@ -3,10 +3,8 @@ function mousePress(varargin)
   % get the variables stored in handles
   myhandles = guidata(gcbo);
   closeEnough=.02;
-
-                              % Three different possible mouse presses
-
-                                % Left Button: Control Point Dragged
+  %% Three different possible mouse presses
+  %% Left Button: Control Point Dragged
   if strcmp(get(gcf,'SelectionType'),'alt')
     currentpos=get(myhandles.axis,'CurrentPoint');
     currentpos=currentpos(1,1:2);

@@ -1,6 +1,7 @@
 function [n_beziers] = find_best_n_beziers(noisy_data)
   tsampling = linspace(0,1,100)';
 
+  %% Empirical Value.. should be based on some percentage instead
   thresh = 0.005;
 
   n = 0;
