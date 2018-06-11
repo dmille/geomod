@@ -9,18 +9,18 @@ function mousePress(varargin)
                                 % Left Button: Control Point Dragged
   if strcmp(get(gcf,'SelectionType'),'alt')
     currentpos=get(myhandles.axis,'CurrentPoint');
-    currentpos=currentpos(1,1:2);  
-    if min(currentpos) >= 0 && max(currentpos) <=1 % within the axis
+    currentpos=currentpos(1,1:2);
+%    if min(currentpos) >= 0 && max(currentpos) <=1 % within the axis
               % get closest control point to the current mous position
-      [mindist,minindx]=min((currentpos(1)-myhandles.bezier_controlPts(:,1)).^2+(currentpos(2)-myhandles.bezier_controlPts(:,2)).^2);
+    [mindist,minindx]=min((currentpos(1)-myhandles.bezier_controlPts(:,1)).^2+(currentpos(2)-myhandles.bezier_controlPts(:,2)).^2);
       if mindist < closeEnough % only update when the the user clicks neer control points
         myhandles.dragStyle=1; 
         myhandles.dragedControlPoint=minindx;
-        myhandles.controlPts(minindx,:)=currentpos;
+        myhandles.bezier_controlPts(minindx,:)=currentpos;
         
         guidata(gcbo,myhandles); % update data in handles
       end
-    end
+%    end
   end
 
                                 % Right Button: Nothing
