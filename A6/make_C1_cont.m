@@ -34,10 +34,7 @@ for j=2:k
         % A is intercept and slope of the least squares line for the knot and
         % the 2 control points on either side. 
         % Snap control points to this line using intersection of point slope with slope=(1/A(2))
-        b = A(1);
-        m = A(2);
-        c1_3pts(:,1) = ((1/m)*c1_3pts(:,1)+c1_3pts(:,2)-b)/(m+1/m);
-        c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
+        c1_3pts = snap_points_to_line(c1_3pts,A);
         
         %plot(c1_3pts(:,1),c1_3pts(:,2),'o','markeredgecolor','r');
 
@@ -93,11 +90,8 @@ if (control_points(1,1:2) == control_points(end,1:2))
         % A is intercept and slope of the least squares line for the knot and
         % the 2 control points on either side. 
         % Snap control points to this line using intersection of point slope with slope=(1/A(2))
-        b = A(1);
-        m = A(2);
-        c1_3pts(:,1) = ((1/m)*c1_3pts(:,1)+c1_3pts(:,2)-b)/(m+1/m);
-        c1_3pts(:,2) = [ones(3,1) c1_3pts(:,1)] * A;
-
+        c1_3pts = snap_points_to_line(c1_3pts,A);
+        
         % find the difference in x between neighboring points. split to be added or
         % subtracted to make equal for c1 continuity
         split_diffx = (abs(c1_3pts(2,1) - c1_3pts(1,1)) - abs(c1_3pts(3,1) - c1_3pts(2,1)))/2;
