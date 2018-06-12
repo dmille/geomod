@@ -24,7 +24,7 @@ myhandles.t=1/2; %for intermediate deCasteljau
 % seup axis with a grid layout for drawing 
 hax = gca; %get handle of current axes
 set(hax,'Unit','normalized','Position',[0 0 1 1]); % make axis fill figure
-axis manual; % disable automatic resizing of axis
+axis auto; % disable automatic resizing of axis
 grid on 
 grid minor; % draw a fine grid 
 

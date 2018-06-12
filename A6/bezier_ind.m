@@ -7,6 +7,6 @@ function b_pts = bezier_ind(control_pts,i)
     b1 = control_pts(b0_ind+1,:);
     b2 = control_pts(b0_ind+2,:);
     b3 = control_pts(b0_ind+3,:);
-    
+
     b_pts = [b0;b1;b2;b3];
 end
