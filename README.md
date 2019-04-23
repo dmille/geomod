@@ -1,5 +1,5 @@
 # geomod
-
+Geometric Modelling Assignments at Saarland University
 
 ### Student Ids
 * David Miller: 2572718
